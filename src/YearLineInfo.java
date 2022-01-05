@@ -3,7 +3,6 @@ import java.util.Objects;
 /**
  * Дата-класс в котором хранится информация об одной строке годового отчета
  */
-
 public class YearLineInfo {
     Integer month;
     Integer amount;

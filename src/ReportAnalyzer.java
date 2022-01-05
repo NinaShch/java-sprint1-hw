@@ -11,22 +11,26 @@ public class ReportAnalyzer {
         int maxIncome = 0;
         String itemNameIncome = "";
         int maxExpense = 0;
-        String itemNameExpense ="";
-        for (int i = 0; i < monthlyReport.data.size(); i++) {
-            if (monthlyReport.data.get(i).isExpense) {
-                if (monthlyReport.data.get(i).quantity*monthlyReport.data.get(i).sumOfOne > maxExpense) {
-                    maxExpense = monthlyReport.data.get(i).quantity*monthlyReport.data.get(i).sumOfOne;
-                    itemNameExpense = monthlyReport.data.get(i).itemName;
+        String itemNameExpense = "";
+        for (int i = 0; i < monthlyReport.getNumberOfReports(); i++) {
+            if (monthlyReport.getMonthlyReportLine(i).isExpense) {
+                if (monthlyReport.getMonthlyReportLine(i).quantity
+                        * monthlyReport.getMonthlyReportLine(i).sumOfOne > maxExpense) {
+                    maxExpense = monthlyReport.getMonthlyReportLine(i).quantity
+                            * monthlyReport.getMonthlyReportLine(i).sumOfOne;
+                    itemNameExpense = monthlyReport.getMonthlyReportLine(i).itemName;
                 }
 
             } else {
-                if (monthlyReport.data.get(i).quantity*monthlyReport.data.get(i).sumOfOne > maxIncome) {
-                    maxIncome = monthlyReport.data.get(i).quantity*monthlyReport.data.get(i).sumOfOne;
-                    itemNameIncome = monthlyReport.data.get(i).itemName;
+                if (monthlyReport.getMonthlyReportLine(i).quantity
+                        * monthlyReport.getMonthlyReportLine(i).sumOfOne > maxIncome) {
+                    maxIncome = monthlyReport.getMonthlyReportLine(i).quantity
+                            * monthlyReport.getMonthlyReportLine(i).sumOfOne;
+                    itemNameIncome = monthlyReport.getMonthlyReportLine(i).itemName;
                 }
             }
         }
-        System.out.println("Отчет за "+monthName.get(monthNumber));
+        System.out.println("Отчет за " + monthName.get(monthNumber));
         System.out.println("Самый прибыльный товар: " + itemNameIncome + ". Сумма выручки составила " +
                 maxIncome + ".");
         System.out.println("Самая большая трата: " + itemNameExpense + ". Сумма расходов " +
@@ -40,17 +44,19 @@ public class ReportAnalyzer {
         int totalExpense = 0;
         int totalIncome = 0;
         int monthProfit;
-        System.out.println(YearlyReport.year+" год");
-        for (int i = 0; i < yearlyReport.yearReport.size()/2; i++) {
+        System.out.println(YearlyReport.YEAR + " год");
+        for (int i = 0; i < yearlyReport.getNumberOfLinesYearlyReport() / 2; i++) {
             monthQuantity += 1;
-            if (yearlyReport.yearReport.get(i * 2).isExpense) {
-                totalExpense += yearlyReport.yearReport.get(i * 2).amount;
-                totalIncome += yearlyReport.yearReport.get(i * 2 + 1).amount;
-                monthProfit = yearlyReport.yearReport.get(i * 2 + 1).amount - yearlyReport.yearReport.get(i * 2).amount;
+            if (yearlyReport.getYearlyReportLine(i * 2).isExpense) {
+                totalExpense += yearlyReport.getYearlyReportLine(i * 2).amount;
+                totalIncome += yearlyReport.getYearlyReportLine(i * 2 + 1).amount;
+                monthProfit = yearlyReport.getYearlyReportLine(i * 2 + 1).amount
+                        - yearlyReport.getYearlyReportLine(i * 2).amount;
             } else {
-                totalIncome += yearlyReport.yearReport.get(i * 2).amount;
-                totalExpense += yearlyReport.yearReport.get(i * 2 + 1).amount;
-                monthProfit = yearlyReport.yearReport.get(i * 2).amount - yearlyReport.yearReport.get(i * 2 + 1).amount;
+                totalIncome += yearlyReport.getYearlyReportLine(i * 2).amount;
+                totalExpense += yearlyReport.getYearlyReportLine(i * 2 + 1).amount;
+                monthProfit = yearlyReport.getYearlyReportLine(i * 2).amount
+                        - yearlyReport.getYearlyReportLine(i * 2 + 1).amount;
             }
             System.out.println("Прибыль за " + monthName.get(monthQuantity) + " - " + monthProfit);
         }

@@ -1,16 +1,26 @@
 public class ReportVerifier {
 
-    public int reportVerifier(MonthlyReport[] monthlyReport, YearlyReport yearlyReport) {
-        for (int i = 0; i < yearlyReport.yearReport.size(); i += 2) {
-            if ((yearlyReport.yearReport.get(i).isExpense) &&
-                    (yearlyReport.yearReport.get(i).amount != monthIncomesAndExpenses(monthlyReport[i / 2])[1] ||
-                    yearlyReport.yearReport.get(i+1).amount != monthIncomesAndExpenses(monthlyReport[i / 2])[0])) {
-                return i / 2 + 1 ;
+    /**
+     * @param monthlyReports
+     * @param yearlyReport
+     * @return месяц, данные по которому не сходятся с годовым отчетом, или ноль если сверка данных
+     * завершена успешно
+     */
+    public int getMonthWithError(MonthlyReport[] monthlyReports, YearlyReport yearlyReport) {
+        for (int i = 0; i < yearlyReport.getNumberOfLinesYearlyReport(); i += 2) {
+            boolean isExpense = yearlyReport.getYearlyReportLine(i).isExpense;
+            int monthExpenses = monthIncomesAndExpenses(monthlyReports[i / 2])[1];
+            int monthIncomes = monthIncomesAndExpenses(monthlyReports[i / 2])[0];
+
+            if (isExpense &&
+                    (yearlyReport.getYearlyReportLine(i).amount != monthExpenses ||
+                            yearlyReport.getYearlyReportLine(i + 1).amount != monthIncomes)) {
+                return i / 2 + 1;
             } else {
-                if (!yearlyReport.yearReport.get(i).isExpense &&
-                        (yearlyReport.yearReport.get(i).amount != monthIncomesAndExpenses(monthlyReport[i / 2])[0] ||
-                        yearlyReport.yearReport.get(i+1).amount != monthIncomesAndExpenses(monthlyReport[i / 2])[1])) {
-                    return i / 2 + 1 ;
+                if (!isExpense &&
+                        (yearlyReport.getYearlyReportLine(i).amount != monthIncomes ||
+                                yearlyReport.getYearlyReportLine(i + 1).amount != monthExpenses)) {
+                    return i / 2 + 1;
                 }
             }
         }
@@ -23,11 +33,13 @@ public class ReportVerifier {
          */
         int[] incomesAndExpenses = new int[2];
 
-        for (int i = 0; i < monthlyReport.data.size(); i++) {
-            if (monthlyReport.data.get(i).isExpense) {
-                incomesAndExpenses[1] += monthlyReport.data.get(i).sumOfOne * monthlyReport.data.get(i).quantity;
+        for (int i = 0; i < monthlyReport.getNumberOfReports(); i++) {
+            if (monthlyReport.getMonthlyReportLine(i).isExpense) {
+                incomesAndExpenses[1] += monthlyReport.getMonthlyReportLine(i).sumOfOne
+                        * monthlyReport.getMonthlyReportLine(i).quantity;
             } else {
-                incomesAndExpenses[0] += monthlyReport.data.get(i).sumOfOne * monthlyReport.data.get(i).quantity;
+                incomesAndExpenses[0] += monthlyReport.getMonthlyReportLine(i).sumOfOne
+                        * monthlyReport.getMonthlyReportLine(i).quantity;
             }
         }
         return incomesAndExpenses;

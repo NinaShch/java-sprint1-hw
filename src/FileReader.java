@@ -8,12 +8,12 @@ public class FileReader {
     /**
      * чтение отчета за месяц
      */
-    public ArrayList <ItemInfo>  createMonthReport (String path) {
-        String fileContents = readFileContentsOrNull(path);
+    public ArrayList<ItemInfo> createMonthReport(String path) throws IOException {
+        String fileContents = readFileContents(path);
         String[] lines = fileContents.split("\\n");
-        ArrayList <ItemInfo> lineContents = new ArrayList<>();
+        ArrayList<ItemInfo> lineContents = new ArrayList<>();
         for (int i = 1; i < lines.length; i++) {
-            String [] line = lines[i].split(",");
+            String[] line = lines[i].split(",");
             lineContents.add(new ItemInfo(line[0], Boolean.parseBoolean(line[1]), Integer.parseInt(line[2]),
                     Integer.parseInt(line[3])));
         }
@@ -23,10 +23,10 @@ public class FileReader {
     /**
      * чтение годового отчета
      */
-    public ArrayList <YearLineInfo>  createYearReport (String path) {
-        String fileContents = readFileContentsOrNull(path);
+    public ArrayList<YearLineInfo> createYearReport(String path) throws IOException {
+        String fileContents = readFileContents(path);
         String[] lines = fileContents.split("\\n");
-        ArrayList <YearLineInfo> lineContents = new ArrayList<>();
+        ArrayList<YearLineInfo> lineContents = new ArrayList<>();
         for (int i = 1; i < lines.length; i++) {
             String[] line = lines[i].split(",");
             lineContents.add(new YearLineInfo(Integer.parseInt(line[0]), Integer.parseInt(line[1]),
@@ -35,13 +35,7 @@ public class FileReader {
         return lineContents;
     }
 
-    private String readFileContentsOrNull(String path) {
-        try {
-            return Files.readString(Path.of(path));
-        } catch (IOException e) {
-            System.out.println("Невозможно прочитать файл с отчётом. " +
-                    "Возможно, файл не находится в нужной директории.");
-            return null;
-        }
+    private String readFileContents(String path) throws IOException {
+        return Files.readString(Path.of(path));
     }
 }
